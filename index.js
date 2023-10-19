@@ -20,6 +20,35 @@ app.post("/students",(req,res)=>{
         mobile
     }
 
+    //checking required fields
+    if(!name){
+        res.json({
+            status : "unsuccess",
+            message: "Name is required"
+        })
+    }
+    if(!age){
+        res.json({
+            status : "unsuccess",
+            message: "Age is required"
+            })
+
+    }
+
+    if(!email){
+        res.json({
+            status : "unsuccess",
+            message: "Email is required"
+            })
+    }
+
+    if(!mobile){
+        res.json({
+            status : "unsuccess",
+            message: "Mobile number is required"
+            })
+    }
+
     students.push(newStudents);
 
     res.json({
@@ -29,6 +58,15 @@ app.post("/students",(req,res)=>{
     });
 })
 
+
+
+app.get("/students",(req,res)=>{
+    res.json({
+        status:'success',
+        data:students,
+        message: 'All Students fetched successfully'
+    })
+})
 
 
 app.get('/home',(req,res)=>{
