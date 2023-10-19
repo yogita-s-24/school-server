@@ -5,7 +5,7 @@ const app = express();
 const PORT = 5000;
 
 app.get('/health',(req,res)=>{
-    res.send({status:"OK"});
+    res.send({status:"OK hai"});
 })
 
 app.listen(PORT, ()=>{
