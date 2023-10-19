@@ -58,7 +58,24 @@ app.post("/students",(req,res)=>{
     });
 })
 
+app.get("/student",(req,res)=>{
 
+    const {id} = req.query;
+
+let student= null;
+
+students.forEach((stud)=>{
+    if (stud.id == id)
+    student = stud;
+})
+
+res.json({
+    status : "success",
+    data : student,
+    message:"Student fatch successfully"
+})
+
+})
 
 app.get("/students",(req,res)=>{
     res.json({
