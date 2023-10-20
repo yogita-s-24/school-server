@@ -1,10 +1,31 @@
 import express from "express";
+import mongoose from "mongoose";
+import dotenv from 'dotenv'
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 
+const MONGODB_URI = process.env.MONGODB_URI;
+
+const connectMongoDB = async ()=>{
+ const conn = await mongoose.connect(MONGODB_URI)
+
+ if(conn){
+    console.log("Connected to MongoDB Successfully...")
+ }
+};
+
+connectMongoDB();
+
+
+//temperary storage
 const students=[];
+
+app.get("/health", (req,res)=>{
+    res.send("I'm healthy");
+})
 
 app.post("/students",(req,res)=>{
 
@@ -95,5 +116,3 @@ const PORT = 5000;
 app.listen(PORT, ()=>{
     console.log(`Server started on port ${PORT}`);
 })
-
-
