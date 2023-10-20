@@ -1,5 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
+import mongoose,{Schema,model} from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config();
 
@@ -21,60 +21,40 @@ connectMongoDB();
 
 
 //temperary storage
-const students=[];
+// const students=[];
+
+//Created Schema 'studentSchema'
+const studentSchema = new Schema({
+    name:String,
+    age:Number,
+    mobile:String,
+    email:String
+});
+
+//Model created using the schema 'Student'
+const Student= model('Students',studentSchema);
+
 
 app.get("/health", (req,res)=>{
     res.send("I'm healthy");
 })
 
-app.post("/students",(req,res)=>{
+app.post("/students",async (req,res)=>{
 
-    const id = Math.floor(Math.random() * 1000) + 1;
+    const {name,age,email,mobile} = req.body;
 
-    const {name, age, email, mobile} = req.body;
+    const newStudent = new Student({
+        name:name,
+        age:age,
+        mobile:mobile,
+        email:email
+    })
 
-    const newStudents = {
-        id,
-        name,
-        age,
-        email,
-        mobile
-    }
-
-    //checking required fields
-    if(!name){
-        res.json({
-            status : "unsuccess",
-            message: "Name is required"
-        })
-    }
-    if(!age){
-        res.json({
-            status : "unsuccess",
-            message: "Age is required"
-            })
-
-    }
-
-    if(!email){
-        res.json({
-            status : "unsuccess",
-            message: "Email is required"
-            })
-    }
-
-    if(!mobile){
-        res.json({
-            status : "unsuccess",
-            message: "Mobile number is required"
-            })
-    }
-
-    students.push(newStudents);
+    const saveStudent = await newStudent.save();
 
     res.json({
         status:"success",
-        students : students,
+        students : saveStudent,
         message: 'Student added successfully'
     });
 })
@@ -98,7 +78,9 @@ res.json({
 
 })
 
-app.get("/students",(req,res)=>{
+app.get("/students", async (req,res)=>{
+
+
     res.json({
         status:'success',
         data:students,
@@ -107,9 +89,9 @@ app.get("/students",(req,res)=>{
 })
 
 
-app.get('/home',(req,res)=>{
-    res.send("Home page here");
-})
+// app.get('/home',(req,res)=>{
+//     res.send("Home page here");
+// })
 
 const PORT = 5000;
 
