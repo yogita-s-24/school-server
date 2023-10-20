@@ -59,16 +59,12 @@ app.post("/students",async (req,res)=>{
     });
 })
 
-app.get("/student",(req,res)=>{
+app.get("/student",async (req,res)=>{
 
-    const {id} = req.query;
+    const {email} = req.query;
 
-let student= null;
+    const student = await Student.findOne({email : email})
 
-students.forEach((stud)=>{
-    if (stud.id == id)
-    student = stud;
-})
 
 res.json({
     status : "success",
@@ -78,9 +74,7 @@ res.json({
 
 })
 
-app.get("/students", async (req,res)=>{
-
-
+app.get("/students",(req,res)=>{
     res.json({
         status:'success',
         data:students,
