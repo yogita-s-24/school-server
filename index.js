@@ -1,7 +1,9 @@
 import express from "express";
-import mongoose,{Schema,model} from "mongoose";
+import mongoose from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config();
+
+import Student from "./src/models/student.js";
 
 const app = express();
 
@@ -18,27 +20,16 @@ const connectMongoDB = async ()=>{
 };
 
 connectMongoDB();
-
-
 //temperary storage
 // const students=[];
 
-//Created Schema 'studentSchema'
-const studentSchema = new Schema({
-    name:String,
-    age:Number,
-    mobile:String,
-    email:String
-});
 
-//Model created using the schema 'Student'
-const Student= model('Students',studentSchema);
-
-
+//for sample checking
 app.get("/health", (req,res)=>{
     res.send("I'm healthy");
 })
 
+//post API for pas student data
 app.post("/students",async (req,res)=>{
 
     const {name,age,email,mobile} = req.body;
@@ -48,10 +39,8 @@ app.post("/students",async (req,res)=>{
         age:age,
         mobile:mobile,
         email:email
-    })
-
+    });
     const saveStudent = await newStudent.save();
-
     res.json({
         status:"success",
         students : saveStudent,
@@ -59,33 +48,29 @@ app.post("/students",async (req,res)=>{
     });
 })
 
+//get API for find student using email
 app.get("/student",async (req,res)=>{
-
     const {email} = req.query;
-
     const student = await Student.findOne({email : email})
-
-
 res.json({
     status : "success",
     data : student,
     message:"Student fatch successfully"
 })
-
 })
 
-app.get("/students",(req,res)=>{
+
+//get API for find all student at a time
+app.get("/students", async(req,res)=>{
+    // console.log('students',students);
+  const students = await Student.find();
+
     res.json({
         status:'success',
         data:students,
         message: 'All Students fetched successfully'
     })
 })
-
-
-// app.get('/home',(req,res)=>{
-//     res.send("Home page here");
-// })
 
 const PORT = 5000;
 
