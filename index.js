@@ -72,6 +72,20 @@ app.get("/students", async(req,res)=>{
     })
 })
 
+//delete api for delete student from db
+app.delete('/student/:_id', async(req,res)=>{
+
+    const { _id } = req.params;
+
+    await Student.deleteOne({ _id : _id });
+
+    res.json({
+        success :true,   
+        message : `Student deleted Successfully ${_id}`
+    })
+
+})
+
 const PORT = 5000;
 
 app.listen(PORT, ()=>{
